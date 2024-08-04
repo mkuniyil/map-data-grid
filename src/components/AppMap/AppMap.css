@@ -1,0 +1,17 @@
+.mapboxgl-control-container {
+  display: none !important;
+}
+
+mapbox-search-box {
+  position: absolute;
+  z-index: 99999;
+  left: 8px;
+  top: 8px;
+}
+
+mapbox-geocoder {
+  position: absolute;
+  z-index: 99999;
+  left: 8px;
+  top: 8px;
+}
