@@ -48,18 +48,10 @@ export const useHandleMapMove = ({
   }, [currentLocation, handleFetchResults, mapRef]);
 
   useEffect(() => {
-    let mapRefValue = null;
     const debouncedHandleMapMove = debounce(handleMapMove, 1000);
 
     if (mapRef.current) {
       mapRef.current.on("move", debouncedHandleMapMove);
-      mapRefValue = mapRef.current;
     }
-
-    return () => {
-      if (mapRefValue) {
-        mapRefValue.off("move", debouncedHandleMapMove);
-      }
-    };
   }, [createMarkers, handleMapMove, mapRef]);
 };

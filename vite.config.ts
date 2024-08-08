@@ -62,6 +62,21 @@ export default defineConfig({
               },
             },
           },
+          {
+            urlPattern:
+              /^https:\/\/api\.mapbox\.com\/geocoding\/.*\/mapbox\.places\/restaurant\.json.*$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "mapbox-geocoding",
+              expiration: {
+                maxEntries: 500, // Adjust as needed
+                maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           // Add other caching rules as needed
         ],
       },

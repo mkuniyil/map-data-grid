@@ -1,4 +1,5 @@
 import { ACCESS_TOKEN } from "@/config";
+import { CurrentLocation } from "@/types";
 import { Geocoder } from "@mapbox/search-js-react";
 import { debounce } from "lodash";
 import mapboxgl from "mapbox-gl";
@@ -11,9 +12,14 @@ interface SearchProps {
     latitude: number,
     description: string
   ) => void;
+  setCurrentLocation: (location: CurrentLocation) => void;
 }
 
-export const Search: FC<SearchProps> = ({ mapRef, createMarkers }) => {
+export const Search: FC<SearchProps> = ({
+  mapRef,
+  createMarkers,
+  setCurrentLocation,
+}) => {
   const [inputValue, setInputValue] = useState<string>("");
 
   const handleSearchChange = debounce((d) => {
@@ -22,6 +28,7 @@ export const Search: FC<SearchProps> = ({ mapRef, createMarkers }) => {
 
   const handleSearchListClick = ({ geometry, properties }: any) => {
     const [longitude, latitude] = geometry.coordinates;
+    setCurrentLocation({ lat: latitude, lng: longitude });
     createMarkers(longitude, latitude, properties.name_preferred);
   };
 

@@ -2,7 +2,7 @@ import { ACCESS_TOKEN } from "@/config";
 import { useInitializeMap } from "@/hooks/useInitializeMap";
 import { useMarker } from "@/hooks/useMarker";
 import mapboxgl from "mapbox-gl";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useHandleMapMove } from "../../hooks/useHandleMapMove";
 import { CurrentLocation, MarkerType, TileQueryFeature } from "../../types";
 import { DataGrid } from "../DataGrid";
@@ -19,18 +19,13 @@ export const AppMap = () => {
   const [currentLocation, setCurrentLocation] =
     useState<CurrentLocation | null>(null);
   const [mapMarkers, setMapMarkers] = useState<MarkerType>({});
-  const mapMarkersRef = useRef<MarkerType>(mapMarkers);
 
   useInitializeMap({ mapRef, setCurrentLocation });
 
-  useEffect(() => {
-    mapMarkersRef.current = mapMarkers;
-  }, [mapMarkers]);
-
   const { createMarkers, removeMarkers } = useMarker({
-    mapMarkersRef,
     mapRef,
     setMapMarkers,
+    mapMarkers,
   });
 
   useHandleMapMove({
@@ -47,7 +42,11 @@ export const AppMap = () => {
         id="map"
         className="md:rounded-lg h-screen md:h-[50vh] md:drop-shadow-sm"
       >
-        <Search mapRef={mapRef} createMarkers={createMarkers} />
+        <Search
+          mapRef={mapRef}
+          createMarkers={createMarkers}
+          setCurrentLocation={setCurrentLocation}
+        />
       </div>
       <DataGrid localeApiResults={localeApiResults} />
     </div>

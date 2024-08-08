@@ -3,36 +3,36 @@ import mapboxgl from "mapbox-gl";
 import { MutableRefObject, useCallback } from "react";
 
 interface UseMarkerProps {
-  mapMarkersRef: MutableRefObject<MarkerType>;
   mapRef: MutableRefObject<mapboxgl.Map | null>;
   setMapMarkers: (markers: MarkerType) => void;
+  mapMarkers: MarkerType;
 }
 
 export const useMarker = ({
-  mapMarkersRef,
   mapRef,
   setMapMarkers,
+  mapMarkers = {},
 }: UseMarkerProps) => {
   const deleteMarker = useCallback(
     (key: string) => {
-      const existingMarKer = mapMarkersRef.current?.[key];
+      const existingMarKer = mapMarkers[key];
 
       if (existingMarKer) {
         existingMarKer.remove();
 
-        const newMarkers = { ...mapMarkersRef.current };
+        const newMarkers = { ...mapMarkers };
         delete newMarkers[key];
         setMapMarkers(newMarkers);
       }
     },
-    [mapMarkersRef, setMapMarkers]
+    [mapMarkers, setMapMarkers]
   );
 
   const removeMarkers = useCallback(() => {
-    if (Object.keys(mapMarkersRef.current).length === 0) return;
+    if (Object.keys(mapMarkers).length === 0) return;
 
-    Object.keys(mapMarkersRef.current).forEach(deleteMarker);
-  }, [deleteMarker, mapMarkersRef]);
+    Object.keys(mapMarkers).forEach(deleteMarker);
+  }, [deleteMarker, mapMarkers]);
 
   const createPopup = (text: string) =>
     new mapboxgl.Popup({ offset: 25, closeOnClick: false }).setHTML(
